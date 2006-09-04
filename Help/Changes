@@ -1,0 +1,14 @@
+			Screensaver
+			Configure screensaver settings
+			by Tony Houghton
+
+04-Oct-2005
+~~~~~~~~~~~
+
+(Version 0.1.0)
+
+New generic settings.py, compatible with dbus 0.36 bindings.
+
+07-May-2004 (Release 0.0.1)
+~~~~~~~~~~~
+Initial release.

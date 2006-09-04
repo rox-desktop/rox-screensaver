@@ -1,0 +1,27 @@
+#!/usr/bin/env python2.4
+import findrox; findrox.version(1, 9, 6)
+
+import os
+import rox
+from rox.settings import Setting, Settings
+from rox.OptionsBox import OptionsBox
+
+__builtins__._ = rox.i18n.translation(os.path.join(rox.app_dir, 'Messages'))
+
+settings = Settings()
+
+class SSS(Setting):
+	def __init__(self, name, default):
+		Setting.__init__(self, name, default, settings)
+
+SSS('ROX/ManageScreensaver', 0)
+SSS('ROX/BlankTime', 10)
+SSS('ROX/DPMSEnable', 1)
+SSS('ROX/DPMSStandby', 15)
+SSS('ROX/DPMSSuspend', 20)
+SSS('ROX/DPMSOff', 30)
+
+box = OptionsBox(settings, os.path.join(rox.app_dir, 'Options.xml'))
+box.open()
+
+rox.mainloop()
