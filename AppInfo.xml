@@ -3,9 +3,8 @@
   <Summary xml:lang="en">Manage your desktop's screensaver settings</Summary>
   <About xml:lang="en">
     <Purpose>Screensaver settings</Purpose>
-    <Version>0.1.0 (04-Oct-2005)</Version>
-    <Author>Tony Houghton
-      Tony Houghton &lt;h@realh.co.uk&gt;</Author>
+    <Version>0.2.0 (13-Apr-2008)</Version>
+    <Author>Tony Houghton &lt;h@realh.co.uk&gt;</Author>
     <License>GNU General Public License</License>
     <Homepage>http://rox.sourceforge.net</Homepage>
   </About>
