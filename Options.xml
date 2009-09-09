@@ -7,6 +7,7 @@
         <radio value='1' type='int' label='Use X.org settings'>If this option is selected ROX-Session sets the X.org timeouts for X server management of the screen blanker, using the options below.</radio>
         <radio value='2' type='int' label='Use gnome-screensaver'>Set this option to make ROX-Session collaborate with gnome-screensaver 2.26 or newer. ROX-Session will start gnome-screensaver for you, so do not try to start it by any other means, but you should start gnome-power-manager separately eg using XDGStart.</radio>
       </radio-group>
+      <cmd_button value='gnome-screensaver-preferences' label='Configure gnome-screensaver' />
       <numentry name='ROX/BlankTime' label='  Blank after:' unit='mins' min='0' max='120' width='3'>The screen will blank without power saving (instant recovery) after this many minutes; 0 to disable blanking.</numentry>
       <toggle name='ROX/DPMSEnable' label='Enable power-saving'>Whether to put the monitor(s) into power saving modes using DPMS after specified delays.</toggle>
       <numentry name='ROX/DPMSStandby' label='Standby after:' unit='mins' min='1' max='120' width='3'>The screen will enter a low level of power saving (minimal power saving, quick recovery) after this many minutes.</numentry>

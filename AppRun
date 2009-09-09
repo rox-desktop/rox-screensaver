@@ -2,11 +2,93 @@
 import findrox; findrox.version(1, 9, 6)
 
 import os
+import subprocess
+import gtk
 import rox
 from rox.settings import Setting, Settings
-from rox.OptionsBox import OptionsBox
+from rox.OptionsBox import OptionsBox as OBBase
 
 __builtins__._ = rox.i18n.translation(os.path.join(rox.app_dir, 'Messages'))
+
+class OptionsBox(OBBase):
+    def __init__(self, options_group, options_xml, translation = None):
+        self.wdict = {}
+        OBBase.__init__(self, options_group, options_xml, translation)
+        self.__connect_signals()
+    
+    def __build_and_store(self, node, label, option, builder):
+        widgets = builder(self, node, label, option)
+        name = rox.OptionsBox.str_attr(node, 'name')
+        if name:
+            if name.startswith('ROX/'):
+                name = name[4:]
+            self.wdict[name] = widgets
+        return widgets
+        
+    def build_toggle(self, node, label, option):
+        return self.__build_and_store(node, label, option,
+                OBBase.build_toggle)
+
+    def build_radio_group(self, node, label, option):
+        return self.__build_and_store(node, label, option,
+                OBBase.build_radio_group)
+    
+    def build_numentry(self, node, label, option):
+        return self.__build_and_store(node, label, option,
+                OBBase.build_numentry)
+    
+    
+    def __connect_signals(self):
+        self.__connect('ManageScreensaver', self.__radio_toggled)
+        self.__connect('DPMSEnable', self.__dpms_toggled)
+    
+    def __connect(self, name, fn):
+        for w in self.wdict[name]:
+            w.connect("toggled", fn)
+    
+    def __radio_toggled(self, w):
+        radios = self.wdict['ManageScreensaver']
+        for n in range(3):
+            if radios[n].get_active():
+                sensitive = n == 1
+                gnome = n == 2
+                break
+        else:
+            sensitive = False
+            gnome = False
+        for n in ['BlankTime', 'DPMSEnable']:
+            self.__set_sensitive(n, sensitive)
+        if sensitive:
+            sensitive = self.wdict['DPMSEnable'][0].get_active()
+        self.__set_dpms_sensitive(sensitive)
+        self.gss_prefs_button.set_sensitive(gnome)
+    
+    def __dpms_toggled(self, w):
+        sensitive = self.wdict['DPMSEnable'][0].get_active()
+        self.__set_dpms_sensitive(sensitive)
+    
+    def __set_dpms_sensitive(self, sensitive):
+        for n in ['DPMSStandby', 'DPMSSuspend', 'DPMSOff']:
+            self.__set_sensitive(n, sensitive)
+    
+    def __set_sensitive(self, name, sensitive):
+        for w in self.wdict[name]:
+            w.set_sensitive(sensitive)
+
+
+def launch_from_button(w, command):
+    subprocess.Popen([command])
+
+def build_cmd_button(box, node, label):
+    button = gtk.Button(label)
+    box.may_add_tip(button, node)
+    button.connect('clicked', launch_from_button,
+            rox.OptionsBox.str_attr(node, 'value'))
+    box.gss_prefs_button = button
+    return [button]
+
+rox.OptionsBox.widget_registry['cmd_button'] = build_cmd_button
+
 
 settings = Settings()
 
