@@ -74,6 +74,11 @@ class OptionsBox(OBBase):
     def __set_sensitive(self, name, sensitive):
         for w in self.wdict[name]:
             w.set_sensitive(sensitive)
+    
+    def open(self):
+        self.__dpms_toggled(None)
+        self.__radio_toggled(None)
+        OBBase.open(self)
 
 
 def launch_from_button(w, command):
