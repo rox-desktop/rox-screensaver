@@ -10,9 +10,9 @@
       <cmd_button value='gnome-screensaver-preferences' label='Configure gnome-screensaver' />
       <numentry name='ROX/BlankTime' label='  Blank after:' unit='mins' min='0' max='120' width='3'>The screen will blank without power saving (instant recovery) after this many minutes; 0 to disable blanking.</numentry>
       <toggle name='ROX/DPMSEnable' label='Enable power-saving'>Whether to put the monitor(s) into power saving modes using DPMS after specified delays.</toggle>
-      <numentry name='ROX/DPMSStandby' label='Standby after:' unit='mins' min='1' max='120' width='3'>The screen will enter a low level of power saving (minimal power saving, quick recovery) after this many minutes.</numentry>
-      <numentry name='ROX/DPMSSuspend' label='Suspend after:' unit='mins' min='1' max='120' width='3'>The screen will enter a medium level of power saving after this many minutes.</numentry>
-      <numentry name='ROX/DPMSOff' label='         Off after:' unit='mins' min='1' max='120' width='3'>The screen will enter a high level of power saving (maximum power saving, slower recovery) after this many minutes.</numentry>
+      <numentry name='ROX/DPMSStandby' label='Standby after:' unit='mins' min='0' max='120' width='3'>The screen will enter a low level of power saving (minimal power saving, quick recovery) after this many minutes.</numentry>
+      <numentry name='ROX/DPMSSuspend' label='Suspend after:' unit='mins' min='0' max='120' width='3'>The screen will enter a medium level of power saving after this many minutes.</numentry>
+      <numentry name='ROX/DPMSOff' label='         Off after:' unit='mins' min='0' max='120' width='3'>The screen will enter a high level of power saving (maximum power saving, slower recovery) after this many minutes.</numentry>
     </frame>
   </section>
 </options>

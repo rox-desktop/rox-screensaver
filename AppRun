@@ -3,6 +3,7 @@ import findrox; findrox.version(1, 9, 6)
 
 import os
 import subprocess
+import sys
 import gtk
 import rox
 from rox.settings import Setting, Settings
@@ -14,6 +15,8 @@ class OptionsBox(OBBase):
     def __init__(self, options_group, options_xml, translation = None):
         self.wdict = {}
         OBBase.__init__(self, options_group, options_xml, translation)
+        self.all_timeouts = map(self.__get_spin_button_by_name,
+                ('BlankTime', 'DPMSStandby', 'DPMSSuspend', 'DPMSOff'))
         self.__connect_signals()
     
     def __build_and_store(self, node, label, option, builder):
@@ -37,14 +40,30 @@ class OptionsBox(OBBase):
         return self.__build_and_store(node, label, option,
                 OBBase.build_numentry)
     
-    
     def __connect_signals(self):
-        self.__connect('ManageScreensaver', self.__radio_toggled)
-        self.__connect('DPMSEnable', self.__dpms_toggled)
+        self.__connect_toggled('ManageScreensaver', self.__radio_toggled)
+        self.__connect_toggled('DPMSEnable', self.__dpms_toggled)
+        self.__connect_timeout_changed('BlankTime')
+        self.__connect_timeout_changed('DPMSStandby')
+        self.__connect_timeout_changed('DPMSSuspend')
+        self.__connect_timeout_changed('DPMSOff')
     
-    def __connect(self, name, fn):
-        for w in self.wdict[name]:
-            w.connect("toggled", fn)
+    def __connect_toggled(self, name, fn):
+        self.wdict[name][0].connect("toggled", fn)
+    
+    def __connect_timeout_changed(self, name):
+        w = self.__get_spin_button_by_name(name)
+        if w:
+            w.connect("changed", self.__timeout_changed)
+    
+    def __get_spin_button_by_name(self, name):
+        for w in self.wdict[name][0].get_children():
+            if isinstance(w, gtk.SpinButton):
+                return w
+        else:
+            print >> sys.stderr, \
+                    'No spin button found for option "ROX/%s"' % name
+        return None
     
     def __radio_toggled(self, w):
         radios = self.wdict['ManageScreensaver']
@@ -75,9 +94,38 @@ class OptionsBox(OBBase):
         for w in self.wdict[name]:
             w.set_sensitive(sensitive)
     
+    def __timeout_changed(self, w):
+        timeout = w.get_value_as_int()
+        if not timeout:
+            return
+        if w == self.all_timeouts[0]:
+            before = []
+            after = self.all_timeouts[1:]
+        elif w == self.all_timeouts[1]:
+            before = self.all_timeouts[:1]
+            after = self.all_timeouts[2:]
+        elif w == self.all_timeouts[2]:
+            before = self.all_timeouts[:2]
+            after = self.all_timeouts[3:]
+        elif w == self.all_timeouts[3]:
+            before = self.all_timeouts[:3]
+            after = []
+        else:
+            print >>sys.stderr, "Value of unknown widget changed"
+            return
+        for w in before:
+            if w.get_value_as_int() > timeout:
+                w.set_value(timeout)
+        for w in after:
+            t = w.get_value_as_int()
+            if t and t < timeout:
+                w.set_value(timeout)
+    
     def open(self):
         self.__dpms_toggled(None)
         self.__radio_toggled(None)
+        for n in ['BlankTime', 'DPMSStandby', 'DPMSSuspend', 'DPMSOff']:
+            self.__timeout_changed(self.__get_spin_button_by_name(n))
         OBBase.open(self)
 
 
