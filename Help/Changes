@@ -2,10 +2,12 @@
 			Configure screensaver settings
 			by Tony Houghton
 
-09-Sep-2009 (Version 0.3.0)
+14-Sep-2009 (Version 0.3.0)
 ~~~~~~~~~~~
- * Support ROX-Session 0.41.0 and gnome-screensaver 0.26
- * Fade buttons which become irrelevant depending on certain options
+ * Support ROX-Session 0.41.0 and gnome-screensaver 0.26.
+ * Fade buttons which become irrelevant depending on certain options.
+ * Aim to make sure deeper power saving levels have longer timeouts than lesser
+   levels.
 
 13-Apr-2008 (Version 0.2.0)
 ~~~~~~~~~~~
